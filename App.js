@@ -1,20 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native'
+import * as Linking from 'expo-linking'
+import { RootDrawerNavigation } from './RootDrawer.jsx'
+
+const prefix = Linking.createURL('/')
+
+const linkingConfig = {
+  prefixes: [prefix, 'campuspulse://'],
+  config: {
+    screens: {
+      MainTabs: {
+        screens: {
+          Feed: {
+            screens: {
+              EventFeed: 'feed',
+              EventDetail: 'events/:id', // Deep link matches /events/101
+            },
+          },
+          Explore: 'explore',
+          Bookmarks: 'bookmarks',
+        },
+      },
+      Profile: 'profile',
+      Settings: 'settings',
+    },
+  },
+}
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <NavigationContainer linking={linkingConfig}>
+      <RootDrawerNavigation />
+    </NavigationContainer>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
